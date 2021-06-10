@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import punkApiHelper from "./tools/punkapiHelper";
+import localApiHelper from "./tools/localapiHelper";
 import BeerItem from "./components/BeerItem/BeerItem";
 
 // For Antd Lib
@@ -15,39 +16,45 @@ function App() {
   useEffect(() => {
     const fetchData = async (page, perPage) => {
       const data = await punkApiHelper(page, perPage);
-      console.log("data", data);
       setData(data);
     };
     fetchData(currentPage, 10);
   }, [currentPage]);
 
+  const fetchDataFromDb = async () => {
+    const data = await localApiHelper.getFavourites();
+    setFavList(data.data);
+  };
+
+  useEffect(() => {
+    fetchDataFromDb();
+  }, []);
+
   const onChangePagination = (page) => {
     setCurrentPage(page);
   };
 
-  const onAddFav = (item) => {
-    console.log("add fav", item.name);
+  const onAddFav = async (item) => {
     let newFavList = [...favList];
     newFavList.push(item);
-    console.log(newFavList);
-    setFavList(newFavList);
+
+    await localApiHelper.addFavourites(item);
+    await fetchDataFromDb();
   };
 
-  const onRemoveFav = (item) => {
-    console.log("remove fav", item);
+  const onRemoveFav = async (item) => {
     let newFavList = [...favList];
     const index = newFavList.indexOf(item);
     if (index > -1) {
       newFavList.splice(index, 1);
     }
-    console.log(newFavList);
-    setFavList(newFavList);
+
+    await localApiHelper.deleteFavourites(item);
+    await fetchDataFromDb();
   };
 
-  console.log(data);
   if (!data) return null;
-
-  // if(!favList.length <= 0 ) return null;
+  if (!favList) return null;
 
   return (
     <div className="App">
