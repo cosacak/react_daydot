@@ -4,6 +4,7 @@ import MaltItems from "../MaltItems/MaltItems";
 import HopsItems from "../HopsItems/HopsItems";
 import star from "../../icon/star.png";
 import noStar from "../../icon/nostar.png";
+import trash from "../../icon/trash.png";
 
 const { Panel } = Collapse;
 
@@ -14,22 +15,35 @@ const BeerItem = (props) => {
   const onClickFavButton = () => {
     setFavState(!favState);
     if (favState) {
+        
       setFavStateIcon(noStar);
+      props.onRemoveFav(props.data);
     } else {
       setFavStateIcon(star);
+      props.onAddFav(props.data);
     }
   };
 
+  const onClickDeleteButton = () => {
+      props.onRemoveFav(props.data);
+  };
+
   let favButton = (
-    <img src={favStateIcon} onClick={onClickFavButton} alt="favIcon"></img>
+    <img src={favStateIcon} onClick={onClickFavButton}  alt="favIcon"></img>
   );
+
+  let deleteButton = (
+    <img src={trash} onClick={onClickDeleteButton}  alt="deleteIcon"></img>
+  );
+
+
 
   return (
     <Collapse>
       <Panel
         header={props.data.name}
         key={props.key}
-        extra={<div onClick={(e) => e.stopPropagation()}>{favButton}</div>}
+        extra={props.showFavIcon ? <div onClick={(e) => e.stopPropagation()}>{favButton}</div> : <div onClick={(e) => e.stopPropagation()}>{deleteButton}</div>}
       >
         <img
           style={{ maxWidth: "40px", marginRight: "10px" }}
