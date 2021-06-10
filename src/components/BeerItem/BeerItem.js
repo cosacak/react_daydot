@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Collapse, Button } from "antd";
-import { StarOutlined } from "@ant-design/icons";
+import { StarOutlined, DeleteOutlined } from "@ant-design/icons";
 import MaltItems from "../MaltItems/MaltItems";
 import HopsItems from "../HopsItems/HopsItems";
 import FoodPairings from "../FoodPairings/FoodPairings";
-
-import trash from "../../icon/trash.png";
 
 const { Panel } = Collapse;
 
@@ -35,7 +33,13 @@ const BeerItem = (props) => {
   );
 
   let deleteButton = (
-    <img src={trash} onClick={onClickDeleteButton} alt="deleteIcon"></img>
+    <Button
+      danger
+      type="primary"
+      ghost="true"
+      onClick={onClickDeleteButton}
+      icon={<DeleteOutlined />}
+    ></Button>
   );
 
   return (
