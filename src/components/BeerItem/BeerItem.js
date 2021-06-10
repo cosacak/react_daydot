@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import { Collapse } from "antd";
+import { Collapse, Button } from "antd";
+import { StarOutlined } from "@ant-design/icons";
 import MaltItems from "../MaltItems/MaltItems";
 import HopsItems from "../HopsItems/HopsItems";
 import FoodPairings from "../FoodPairings/FoodPairings";
-import star from "../../icon/star.png";
-import noStar from "../../icon/nostar.png";
+
 import trash from "../../icon/trash.png";
 
 const { Panel } = Collapse;
 
 const BeerItem = (props) => {
   const [favState, setFavState] = useState(false);
-  const [favStateIcon, setFavStateIcon] = useState(noStar);
 
   const onClickFavButton = () => {
     setFavState(!favState);
     if (favState) {
-      setFavStateIcon(noStar);
       props.onRemoveFav(props.data);
     } else {
-      setFavStateIcon(star);
       props.onAddFav(props.data);
     }
   };
@@ -29,7 +26,12 @@ const BeerItem = (props) => {
   };
 
   let favButton = (
-    <img src={favStateIcon} onClick={onClickFavButton} alt="favIcon"></img>
+    <Button
+      type="primary"
+      ghost="true"
+      onClick={onClickFavButton}
+      icon={<StarOutlined />}
+    ></Button>
   );
 
   let deleteButton = (
